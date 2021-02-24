@@ -1,0 +1,50 @@
+
+
+
+<?php $view = $this->getData('viewModel'); ?>
+
+
+<?php echo $view->Test_function(); ?>
+
+
+
+<form action="#" accept-charset="utf-8" method="POST" onSubmit="return false;">
+    <input  class="zipsearch" type="search" name="zipjson">
+    <input  class="sendZip" type="submit" value="Send">
+</form>
+
+
+<script type="text/javascript">
+    require([ 'jquery', 'jquery/ui'], function($){
+        $(document).ready(function($) {
+            $(".sendZip").click(function (e) {
+                var zip = $(".zipsearch").val();
+                alert(zip);
+                var url = "<?php echo $this->getUrl('custom', ['_secure' => false]) ?>";
+                jQuery.ajax({
+                    url: url,
+                    type: "POST",
+                    data: {
+                        zip:zip
+                    },
+                    showLoader: true,
+                    cache: false,
+                    success: function(response){
+                        console.log(response);
+                    },
+                    error:function (res) {
+                        console.log(res);
+                    }
+                });
+            });
+
+        });
+    });
+</script>
+
+
+<?php //foreach ($view->lessonThree() as $bestF): ?>
+<!--    --><?php //echo "|". $bestF->getData('postcode'); ?>
+<!--    <br/>-->
+<?php //endforeach; ?>
+
