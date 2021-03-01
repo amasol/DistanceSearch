@@ -6,9 +6,8 @@ use Magento\Framework\App\Action\Action;
 use GuzzleHttp\ClientFactory;
 use GuzzleHttp\Exception\GuzzleException;
 
-class AddProductDatabase
+class GoogleApiSearchZip
 {
-
 	/**
 	 * @var \Magento\Framework\App\ResourceConnection
 	 */
@@ -17,7 +16,6 @@ class AddProductDatabase
 	//Passkey=&Include=Answers&Filter=ProductId:FIBERS&Limit=10&Offset=10
 	const API_REQUEST_URI = 'https://maps.googleapis.com/';
 	private $clientFactory;
-	public $testViewModel;
 
 	public function __construct(
 		\Magento\Framework\App\ResourceConnection $connection,
@@ -28,13 +26,16 @@ class AddProductDatabase
 		$this->connection = $connection;
 	}
 
-    public function total(){
+//      должна быть валидацыя данных
+    public function total2($zip){
 
-        $client = $this->clientFactory->create(['config' => ['base_uri' => self::API_REQUEST_URI]]);
+        $client = $this->clientFactory->create(['config' => [
+            'base_uri' => self::API_REQUEST_URI
+        ]]);
 
         $params = [
             'query' => [
-                'address' => 'kiev',
+                'components' => 'postal_code:'.$zip,
                 'key' => 'AIzaSyBSiWyPtBS2Esy_ObhOSQJT81AfU3jyXcQ'
             ]
         ];
@@ -50,19 +51,7 @@ class AddProductDatabase
             return $exception->getMessage();
         }
         $responseDataArray = json_decode($response->getBody()->getContents(), true);
-        $total = $responseDataArray;
-
-        return $total;
+        $total = $responseDataArray['results'][0]['geometry']['location'];
+        return json_encode($total);
     }
-
-	public function apibazaarvoice()
-	{
-
-		return "DONE";
-	}
-//    public function zip($post)
-//    {
-//
-//        return "DONE".$post;
-//    }
 }

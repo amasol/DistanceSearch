@@ -27,15 +27,24 @@ class Index extends \Magento\Framework\App\Action\Action
 
     public function execute()
     {
-        $result = $this->resultJsonFactory->create();
-        if ($this->getRequest()->isAjax()) {
-            $post = $this->getRequest()->getPost();
-            $t = $this->AddProductDatabase->total();
+//        $result = $this->resultJsonFactory->create();
+//        if ($this->getRequest()->isAjax()) {
+//            $post = $this->getRequest()->getPost();
+//            $this->AddProductDatabase->total($this->getRequest()->getParam('zip'), $this->getRequest()->getParam('address'));
+//            $this->AddProductDatabase->total();
 
-            file_put_contents('/var/www/html/viviscal/test.log', "data: ". json_encode($t) . "\n", FILE_APPEND | LOCK_EX);
-        }
+
+//            $total = $this->AddProductDatabase->total();
+//            file_put_contents('/var/www/html/viviscal/test.log', "data: ". json_encode($total) . "\n", FILE_APPEND | LOCK_EX);
+//            file_put_contents(BP. '/var/log/data.log', print_r($this->getRequest()->getParams('zip'), true) ."\n", FILE_APPEND | LOCK_EX);
+
+//            file_put_contents('/var/www/html/viviscal/test.log', print_r($this->getRequest()->getParam('address'), true) ."\n", FILE_APPEND | LOCK_EX);
+
+//            file_put_contents('/var/www/html/viviscal/test.log', print_r($this->getRequest()->getParams(), true) ."\n", FILE_APPEND | LOCK_EX);
+//            file_put_contents('/var/www/html/viviscal/test.log', print_r($this->getRequest()->getParam('zip'), true) ."\n", FILE_APPEND | LOCK_EX);
+//        }
+
         $page = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-
         return $page;
     }
 }

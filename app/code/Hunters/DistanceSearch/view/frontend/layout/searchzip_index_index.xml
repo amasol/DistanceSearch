@@ -4,10 +4,10 @@
         <referenceContainer name="content">
             <block  
                     name="block.search"
-                    template="Hunters_DistanceSearch::custom.phtml">
+                    template="Hunters_DistanceSearch::searchzip.phtml">
 
                     <arguments>
-                        <argument name="viewModel" xsi:type="object">Hunters\DistanceSearch\viewModel\distanceSearch</argument>
+                        <argument name="viewModel" xsi:type="object">Hunters\DistanceSearch\viewModel\SearchZip</argument>
                     </arguments>
             </block>
         </referenceContainer>

@@ -1,11 +1,11 @@
+<?php
+/**@var Hunters\DistanceSearch\ViewModel\SearchZip $viewModel*/
+$viewModel = $this->getData('viewModel');
+?>
 
-
-
-<?php $view = $this->getData('viewModel'); ?>
-
-
-<?php echo $view->Test_function(); ?>
-
+<div>
+    <span class="cord"></span>
+</div>
 
 
 <form action="#" accept-charset="utf-8" method="POST" onSubmit="return false;">
@@ -15,12 +15,12 @@
 
 
 <script type="text/javascript">
+
     require([ 'jquery', 'jquery/ui'], function($){
         $(document).ready(function($) {
             $(".sendZip").click(function (e) {
                 var zip = $(".zipsearch").val();
-                alert(zip);
-                var url = "<?php echo $this->getUrl('custom', ['_secure' => false]) ?>";
+                var url = "<?php echo $this->getUrl('searchjson/page/ajax', ['_secure' => false]) ?>";
                 jQuery.ajax({
                     url: url,
                     type: "POST",
@@ -29,22 +29,19 @@
                     },
                     showLoader: true,
                     cache: false,
-                    success: function(response){
-                        console.log(response);
+                    complete: function(response) {
+                        var res = $.parseJSON(response.responseText);
+                        var total = $.parseJSON(res.loc);
+                        console.log(total);
+                        $(".cord").text("lat = "+total.lat+"; lng = "+total.lng+";");
                     },
-                    error:function (res) {
-                        console.log(res);
+                    error: function (xhr, status, errorThrown) {
+                        console.log('Error happens. Try again.');
                     }
                 });
-            });
 
+            });
         });
     });
+
 </script>
-
-
-<?php //foreach ($view->lessonThree() as $bestF): ?>
-<!--    --><?php //echo "|". $bestF->getData('postcode'); ?>
-<!--    <br/>-->
-<?php //endforeach; ?>
-

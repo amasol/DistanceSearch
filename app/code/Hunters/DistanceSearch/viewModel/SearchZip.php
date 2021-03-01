@@ -2,7 +2,7 @@
 
 namespace Hunters\DistanceSearch\viewModel;
 
-class DistanceSearch implements \Magento\Framework\View\Element\Block\ArgumentInterface
+class SearchZip implements \Magento\Framework\View\Element\Block\ArgumentInterface
 {
       /**
     * @var \Hunters\DistanceSearch\Service\AddProductDatabase
@@ -31,9 +31,45 @@ class DistanceSearch implements \Magento\Framework\View\Element\Block\ArgumentIn
 
     public function Test_function()
     {
-      return $this->AddProductDatabase->apibazaarvoice();
-//      return $this->AddProductDatabase->total();
+//        echo $this->getRequest()->getParam('zip');
+//      return var_dump($this->AddProductDatabase->total('asdfasg'));
+      return var_dump($this->AddProductDatabase->total());
+
+//        print_r($this->AddProductDatabase->total()['results'][0]['geometry']['location']);
+//        echo "</br>";
+//        $this->AddProductDatabase->print_my();
+//        $result = print_r($this->AddProductDatabase->total()['results'][0]['geometry']['location']);
+//      return ;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
