@@ -1,0 +1,62 @@
+<?php /**@var Hunters\SearchShopMap\ViewModel\Search $viewModel*/ ?>
+
+<?php $viewModel = $this->getData('viewModel'); ?>
+
+<div>
+    <span class="coordinates"></span>
+</div>
+
+
+<form action="#" accept-charset="utf-8" method="POST" onSubmit="return false;">
+        <input  class="zipsearch" type="search" name="zipjson">
+        <input  class="sendZip" type="submit" value="Send">
+</form>
+
+
+
+<script type="text/javascript">
+    require([ 'jquery', 'jquery/ui'], function($){
+        $(document).ready(function($) {
+            $(".sendZip").click(function (e) {
+                    var zip = $(".zipsearch").val();
+                    var url = "<?php echo $this->getUrl('searchjson/page/ajax', ['_secure' => false]) ?>";
+                    // console.log(url);
+                    jQuery.ajax({
+                        url: url,
+                        type: "POST",
+                        data: {
+                            zip:zip
+                        },
+                        showLoader: true,
+                        cache: false,
+                        complete: function(response) {
+                             var res = $.parseJSON(response.responseText);
+                             var total = $.parseJSON(res.loc);
+                            // console.log(total);
+                            console.log(res.loc);
+                            $(".coordinates").text("lat = "+total.lat+"; lng = "+total.lng+";");
+                        },
+                        error: function (xhr, status, errorThrown) {
+                            console.log('Error happens. Try again.');
+                        }
+                    });
+
+            });
+        });
+    });
+</script>
+
+<?php
+echo '<pre>';
+    print_r($viewModel->lessonThree());
+//    echo $viewModel->lessonThree();
+echo '/<pre>';
+?>
+
+<?//= $viewModel->getMyFriendModel('1','postcode')?>
+
+<?php //foreach ($viewModel->lessonThree() as $bestF): ?>
+<!--    --><?php //echo "|". $bestF->getData('postcode'); ?>
+<!--    --><?php //echo $bestF->getData('postcode'); ?>
+<!---->
+<?php //endforeach; ?>
