@@ -1,57 +1,125 @@
-<?php /**@var Hunters\SearchShopMap\ViewModel\Search $viewModel*/ ?>
 
-<?php $viewModel = $this->getData('viewModel'); ?>
 
-<div>
-    <span class="coordinates"></span>
-</div>
+<?php
+/**@var Hunters\SearchShopMap\ViewModel\Search $viewModel*/
+$viewModel = $this->getData('viewModel');
 
+//$viewModel->coordinateArray();
+//$myCollection = $viewModel->getMyCustomCollection()->getData();
+//$resultCoordinate = $viewModel->coordinateArray($myCollection);
+$resultCoordinate = $viewModel->coordinateArray();
+//$resultState = $viewModel->stateAndCoordianateArray($myCollection);
+
+?>
 
 <form action="#" accept-charset="utf-8" method="POST" onSubmit="return false;">
-        <input  class="zipsearch" type="search" name="zipjson">
-        <input  class="sendZip" type="submit" value="Send">
+    <input  class="zipsearch" type="search" name="zipjson">
+    <input  class="sendZip" type="submit" value="Send">
 </form>
+</br>
+<div>
+    <span class="coordinate"></span>
+    </br>
+    <span class="state"></span>
+</div>
+</br>
+<div id="google-map" ></div>
 
-
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSiWyPtBS2Esy_ObhOSQJT81AfU3jyXcQ&callback=initMap">
+</script>
 
 <script type="text/javascript">
     require([ 'jquery', 'jquery/ui'], function($){
         $(document).ready(function($) {
+            let array_cordinate = <?php echo json_encode($resultCoordinate); ?>;
+            //let array_state = <?php //echo json_encode($resultState); ?>//;
+            var s = '<script src="https://polyfill.io/v3/polyfill.min.js?features=default"/>';
+            var ss = '<script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"/>';
+            $('head').append(s);
+            $('head').append(ss)
+            ;
             $(".sendZip").click(function (e) {
-                    var zip = $(".zipsearch").val();
-                    var url = "<?php echo $this->getUrl('searchjson/page/ajax', ['_secure' => false]) ?>";
-                    // console.log(url);
-                    jQuery.ajax({
-                        url: url,
-                        type: "POST",
-                        data: {
-                            zip:zip
-                        },
-                        showLoader: true,
-                        cache: false,
-                        complete: function(response) {
-                             var res = $.parseJSON(response.responseText);
-                             var total = $.parseJSON(res.loc);
-                            // console.log(total);
-                            console.log(res.loc);
-                            $(".coordinates").text("lat = "+total.lat+"; lng = "+total.lng+";");
-                        },
-                        error: function (xhr, status, errorThrown) {
-                            console.log('Error happens. Try again.');
+                var zip = $(".zipsearch").val();
+                var url = "<?php echo $this->getUrl('searchjson/page/ajax', ['_secure' => false]) ?>";
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: {
+                        zip:zip
+                    },
+                    showLoader: true,
+                    cache: false,
+                    complete: function(response) {
+                        console.log(response);
+                        var res = $.parseJSON(response.responseText);
+                        if (($.parseJSON(res.loc)) !== null) {
+                            var coordinate = ($.parseJSON(res.loc)).coordinate;
+                            var state = ($.parseJSON(res.loc)).state;
+                            // console.log(coordinate)
+                            // $(".coordinate").text("Your coordinates: lat = " + 41.3071695 + "; lng = " + -87.202099 + ";");
+                            $(".coordinate").text("Your coordinates: lat = " + coordinate.lat + "; lng = " + coordinate.lng + ";");
+                            $(".state").text("Your coordinates:  " + state + ";");
+                            initMap(coordinate);
                         }
-                    });
-
+                        else {
+                            alert("No search you zip: "+zip+" code!");
+                        }
+                    },
+                    error: function (xhr, status, errorThrown) {
+                        console.log('Error happens. Try again.');
+                    }
+                });
             });
+
+            const  locations = array_cordinate;
+            function initMap(myCoordinate) {
+                const  myLatLng = myCoordinate;
+                const map = new google.maps.Map(document.getElementById("google-map"), {
+                    zoom: 10,
+                    center: myLatLng,
+                });
+                new google.maps.Marker({
+                    position: myLatLng,
+                    map,
+                    title: "My marker!",
+                    icon: {
+                        url: "https://upload.wikimedia.org/wikipedia/commons/3/38/Simpleicons_Places_flag-map-marker-1.svg",
+                        scaledSize: new google.maps.Size(35, 35)
+                    }
+                });
+                const labels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                const markers = locations.map((location, i) => {
+                    return new google.maps.Marker({
+                        position: location,
+                        label: labels[i % labels.length],
+                    });
+                });
+                new MarkerClusterer(map, markers, {
+                    imagePath: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
+                });
+            }
         });
     });
 </script>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <?php
-echo '<pre>';
-    print_r($viewModel->lessonThree());
-//    echo $viewModel->lessonThree();
-echo '/<pre>';
-?>
+//    $viewModel->printView();
+//?>
 
 <?//= $viewModel->getMyFriendModel('1','postcode')?>
 

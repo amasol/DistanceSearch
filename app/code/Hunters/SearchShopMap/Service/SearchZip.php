@@ -19,23 +19,27 @@ class SearchZip
 	public function __construct (
 		\Magento\Framework\App\ResourceConnection $connection,
 		ClientFactory $clientFactory
-	)
-	{
+	) {
 		$this->clientFactory = $clientFactory;
 		$this->connection = $connection;
 	}
 
-	public function validateZipCode($zipCode) {
-        if (preg_match('/^[0-9]{5}(-[0-9]{4})?$/', $zipCode))
+	public function validateZipCode($zipCode)
+    {
+        if (preg_match('/^[0-9]{5}(-[0-9]{4})?$/', $zipCode)) {
             return true;
-        else
+        } else {
             return false;
+        }
 	}
+
 
     public function total($zip)
     {
         $result = array();
-        if ($this->validateZipCode($zip)) {
+        if ($this->validateZipCode($zip))
+        {
+
         $client = $this->clientFactory->create(['config' => [
             'base_uri' => self::API_REQUEST_URI
         ]]);
@@ -58,17 +62,15 @@ class SearchZip
         }
 
         $responseDataArray = json_decode($response->getBody()->getContents(), true);
-        $total = $responseDataArray['results'][0]['geometry']['location'];
-
-
-
-
-        $result['postcode'] = $zip;
-        $result['state'] = $responseDataArray['results'][0]['address_components'][2]['long_name'];
-        $result['coordinate'] = $responseDataArray['results'][0]['geometry']['location'];
-        return json_encode($result);
-        }
-        else {
+            if ($responseDataArray['results'])
+            {
+                $result['postcode'] = $zip;
+                $result['state'] = $responseDataArray['results'][0]['address_components'][2]['long_name'];
+                $result['coordinate'] = json_encode($responseDataArray['results'][0]['geometry']['location']);
+                return json_encode($result);
+            }
+        } else
+            {
             return NULL;
         }
     }

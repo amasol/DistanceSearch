@@ -16,11 +16,16 @@ input[type="submit"] {
     border: none; /* Убираем рамку */
     background: #15a8b4;
 }
-.coordinates {
+.coordinate {
     color: #0f9d58;
     text-align: center;
 }
 
 input.zipsearch {
     background: rgb(239 239 239);
+}
+
+#google-map {
+    height: 400px;
+    width: 100%;
 }
