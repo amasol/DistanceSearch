@@ -6,9 +6,24 @@ use Hunters\SearchShopMap\Service\SearchZip;
 
 class Ajax extends \Magento\Framework\App\Action\Action
 {
-
+    /**
+     * @var SearchZip
+     */
     private $searchZip;
 
+    /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    public $resultFactory;
+
+    /**
+     * @var \Magento\Framework\Json\Helper\Data
+     */
+    private $jsonHelper;
+
+    /**
+     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
+     */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
@@ -24,16 +39,15 @@ class Ajax extends \Magento\Framework\App\Action\Action
     public function execute()
     {
         /**
-         * @var \Magento\Framework\Controller\Result\Raw $response
+         * @return \Magento\Framework\Controller\Result\Raw $response
          **/
-
         $response = $this->resultFactory->create(ResultFactory::TYPE_RAW);
 
         $response->setHeader('Content-type', 'text/plain');
         if ($this->getRequest()->isAjax()) {
 
-            $post = $this->getRequest()->getPost();
-            $zip = $this->searchZip->total($post['zip']);
+            $post = $this->getRequest()->getParam('zip');
+            $zip = $this->searchZip->total($post);
 
             $response->setContents(
                 $this->jsonHelper->jsonEncode(

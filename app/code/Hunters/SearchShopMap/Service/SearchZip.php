@@ -2,21 +2,24 @@
 
 namespace Hunters\SearchShopMap\Service;
 
-use Magento\Framework\App\Action\Action;
 use GuzzleHttp\ClientFactory;
 use GuzzleHttp\Exception\GuzzleException;
 
 class SearchZip
 {
+    const API_REQUEST_URI = 'https://maps.googleapis.com/';
+
 	/**
 	 * @var \Magento\Framework\App\ResourceConnection
 	 */
 	protected $connection;
 
-	const API_REQUEST_URI = 'https://maps.googleapis.com/';
-	private $clientFactory;
+    /**
+     * @var ClientFactory
+     */
+    private $clientFactory;
 
-	public function __construct (
+	public function __construct(
 		\Magento\Framework\App\ResourceConnection $connection,
 		ClientFactory $clientFactory
 	) {
@@ -33,14 +36,11 @@ class SearchZip
         }
 	}
 
-
     public function total($zip)
     {
         $result = array();
-        if ($this->validateZipCode($zip))
-        {
-
-        $client = $this->clientFactory->create(['config' => [
+        if ($this->validateZipCode($zip)) {
+            $client = $this->clientFactory->create(['config' => [
             'base_uri' => self::API_REQUEST_URI
         ]]);
 
@@ -62,8 +62,7 @@ class SearchZip
         }
 
         $responseDataArray = json_decode($response->getBody()->getContents(), true);
-            if ($responseDataArray['results'])
-            {
+            if ($responseDataArray['results']) {
                 $result['postcode'] = $zip;
                 $result['state'] = $responseDataArray['results'][0]['address_components'][2]['long_name'];
                 $result['coordinate'] = json_encode($responseDataArray['results'][0]['geometry']['location']);

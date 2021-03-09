@@ -1,5 +1,4 @@
 
-
 <?php
 /**@var Hunters\SearchShopMap\ViewModel\Search $viewModel*/
 $viewModel = $this->getData('viewModel');
@@ -41,8 +40,7 @@ $resultCoordinate = $viewModel->coordinateArray();
             var s = '<script src="https://polyfill.io/v3/polyfill.min.js?features=default"/>';
             var ss = '<script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"/>';
             $('head').append(s);
-            $('head').append(ss)
-            ;
+            $('head').append(ss);
             $(".sendZip").click(function (e) {
                 var zip = $(".zipsearch").val();
                 var url = "<?php echo $this->getUrl('searchjson/page/ajax', ['_secure' => false]) ?>";
@@ -104,29 +102,3 @@ $resultCoordinate = $viewModel->coordinateArray();
         });
     });
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<?php
-//    $viewModel->printView();
-//?>
-
-<?//= $viewModel->getMyFriendModel('1','postcode')?>
-
-<?php //foreach ($viewModel->lessonThree() as $bestF): ?>
-<!--    --><?php //echo "|". $bestF->getData('postcode'); ?>
-<!--    --><?php //echo $bestF->getData('postcode'); ?>
-<!---->
-<?php //endforeach; ?>

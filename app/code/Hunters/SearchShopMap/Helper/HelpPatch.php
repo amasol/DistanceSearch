@@ -3,7 +3,11 @@ namespace Hunters\SearchShopMap\Helper;
 
 class HelpPatch
 {
+    /**
+     * @var \Hunters\SearchShopMap\Service\SearchZip
+     */
     protected $searchZip;
+
     /**
      * @var \Magento\Framework\App\ResourceConnection
      */
@@ -15,19 +19,20 @@ class HelpPatch
     protected $friendsCollectionFactory;
 
     /**
-     * AddAddressDatabase constructor.
+     * HelpPatch constructor
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $connection,
-        \Hunters\SearchShopMap\Model\ResourceModel\Collection\FriendsFactory $friendsCollectionFactory,
-        \Hunters\SearchShopMap\Service\SearchZip $searchZip
+        \Hunters\SearchShopMap\Service\SearchZip $searchZip,
+        \Hunters\SearchShopMap\Model\ResourceModel\Collection\FriendsFactory $friendsCollectionFactory
     ) {
+        $this->searchZip = $searchZip;
         $this->connection = $connection;
         $this->friendsCollectionFactory = $friendsCollectionFactory;
-        $this->searchZip = $searchZip;
     }
 
-    public function coordinate($zip) {
+    public function coordinate($zip)
+    {
         sleep(0.2);
         $address = $this->searchZip->total($zip);
         if ($address != NULL){
@@ -44,8 +49,8 @@ class HelpPatch
         $model = $this->friendsCollectionFactory->create();
         $model->getItems();
         $allZipArray = $model->getColumnValues("postcode");
-
         $resultIncorrectZip = array_map(array($this, 'coordinate'), $allZipArray);
+
         $resultIncorrectArray = array_filter($resultIncorrectZip, function($element) {
             if ($element != NULL) {
                 return $element;
