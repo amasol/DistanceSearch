@@ -1,0 +1,12 @@
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="AddressZipCode">
+        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true" extra="auto_increment" comment="Entity Id"/>
+        <column xsi:type="varchar" name="postcode" nullable="false" length="255" comment="Postcode"/>
+        <column xsi:type="varchar" name="state" nullable="false" length="255" comment="State"/>
+        <column xsi:type="varchar" name="coordinate" nullable="false" length="255" comment="Сoordinate"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+    </table>
+</schema>
