@@ -6,17 +6,17 @@ class HelpPatch
     /**
      * @var \Hunters\SearchShopMap\Service\SearchZip
      */
-    protected $searchZip;
+    public $searchZip;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
      */
-    protected $connection;
+    public $connection;
 
     /**
      * @var \Hunters\SearchShopMap\Model\ResourceModel\Collection\Friends
      */
-    protected $friendsCollectionFactory;
+    public $friendsCollectionFactory;
 
     /**
      * HelpPatch constructor
@@ -49,7 +49,16 @@ class HelpPatch
         $model = $this->friendsCollectionFactory->create();
         $model->getItems();
         $allZipArray = $model->getColumnValues("postcode");
+//        удалить ограничение
+        $allZipArray = array_slice($allZipArray, 0, 10);
         $resultIncorrectZip = array_map(array($this, 'coordinate'), $allZipArray);
+
+//        echo '<pre>';
+//        print_r($resultIncorrectZip);
+//        echo "test";
+//        echo '</pre>';
+//        exit();
+
 
         $resultIncorrectArray = array_filter($resultIncorrectZip, function($element) {
             if ($element != NULL) {

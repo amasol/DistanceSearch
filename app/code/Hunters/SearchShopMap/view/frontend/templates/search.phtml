@@ -1,5 +1,5 @@
-
 <?php
+
 /**@var Hunters\SearchShopMap\ViewModel\Search $viewModel*/
 $viewModel = $this->getData('viewModel');
 
@@ -9,8 +9,6 @@ $viewModel = $this->getData('viewModel');
 
 $resultCoordinate = $viewModel->coordinateArray();
 
-
-//$resultState = $viewModel->stateAndCoordianateArray($myCollection);
 
 
 ?>
@@ -36,7 +34,6 @@ $resultCoordinate = $viewModel->coordinateArray();
     require([ 'jquery', 'jquery/ui'], function($){
         $(document).ready(function($) {
             let array_cordinate = <?php echo json_encode($resultCoordinate); ?>;
-            //let array_state = <?php //echo json_encode($resultState); ?>//;
             var s = '<script src="https://polyfill.io/v3/polyfill.min.js?features=default"/>';
             var ss = '<script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"/>';
             $('head').append(s);
@@ -78,7 +75,6 @@ $resultCoordinate = $viewModel->coordinateArray();
                 const map = new google.maps.Map(document.getElementById("google-map"), {
                     zoom: 13,
                     center: myLatLng
-                    // - здесь мои к оордина
                 });
                 new google.maps.Marker({
                     position: myLatLng, map,

@@ -12,12 +12,12 @@ class AddAddressDatabase implements SchemaPatchInterface
     /**
      * @var \Hunters\SearchShopMap\Helper\HelpPatch
      */
-    protected $helpPatch;
+    public $helpPatch;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
      */
-    protected $connection;
+    public $connection;
 
     /**
      * AddAddressDatabase constructor.
@@ -51,7 +51,10 @@ class AddAddressDatabase implements SchemaPatchInterface
         $this->moduleDataSetup->startSetup();
         $connection = $this->connection->getConnection();
         $table = $this->connection->getTableName('AddressZipCode');
+
+//      проверка фенкции validData на google API
         $zipArr = array_values($this->helpPatch->validData());
+
         $arr = $this->helpPatch->addDataTable($zipArr);
         $connection->insertMultiple($table, $arr);
         $this->moduleDataSetup->endSetup();
