@@ -1,0 +1,93 @@
+<?xml version="1.0" ?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+	<argument name="data" xsi:type="array">
+		<item name="js_config" xsi:type="array">
+			<item name="provider" xsi:type="string">hunters_smtp_queue_listing.hunters_smtp_queue_listing_data_source</item>
+		</item>
+		<item name="storageConfig" xsi:type="array">
+   	 <item name="indexField" xsi:type="string">queue_id</item>
+	</item>
+	</argument>
+	<settings>
+		<spinner>hunters_smtp_queue_columns</spinner>
+		<deps>
+			<dep>hunters_smtp_queue_listing.hunters_smtp_queue_listing_data_source</dep>
+		</deps>
+	</settings>
+	<dataSource component="Magento_Ui/js/grid/provider" name="hunters_smtp_queue_listing_data_source">
+		<settings>
+			<updateUrl path="mui/index/render"/>
+		</settings>
+		<aclResource>Hunters_Smtp::Queue</aclResource>
+		<dataProvider class="Hunters\Smtp\Ui\DataProvider\Queue\QueueDataProvider" name="hunters_smtp_queue_listing_data_source">
+			<settings>
+				<requestFieldName>queue_id</requestFieldName>
+				<primaryFieldName>queue_id</primaryFieldName>
+			</settings>
+		</dataProvider>
+	</dataSource>
+	<listingToolbar name="listing_top">
+		<settings>
+			<sticky>true</sticky>
+		</settings>
+		<bookmark name="bookmarks"/>
+		<columnsControls name="columns_controls"/>
+		<filters name="listing_filters"/>
+		<paging name="listing_paging"/>
+	</listingToolbar>
+	<columns name="hunters_smtp_queue_columns">
+		<selectionsColumn name="ids">
+			<settings>
+				<indexField>queue_id</indexField>
+			</settings>
+		</selectionsColumn>
+		<column name="queue_id">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Queue ID</label>
+			</settings>
+		</column>
+		<column name="created_at">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Created Date</label>
+			</settings>
+		</column>
+		<column name="updated_at">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Updated Date</label>
+			</settings>
+		</column>
+		<column name="email">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Email</label>
+			</settings>
+		</column>
+		<column name="sender">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Sender</label>
+			</settings>
+		</column>
+		<column name="subject">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Subject</label>
+			</settings>
+		</column>
+		<column name="status">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Status</label>
+			</settings>
+		</column>
+		<column name="store_id">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Store</label>
+			</settings>
+		</column>
+	</columns>
+</listing>

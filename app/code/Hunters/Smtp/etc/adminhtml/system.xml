@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="system">
+                <group id="smtp_configuration" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1">
+                    <label>Smtp Configuration</label>
+                    <depends>
+                        <field id="disable">0</field>
+                    </depends>
+                    <field id="enable" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Manual Configuration</label>
+                        <comment>Manually specify the mail server instead of using the default PHP mail configuration.</comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="sf_username" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>SalesForce username</label>
+                        <validate>required-entry</validate>
+                        <depends>
+                            <field id="enable">1</field>
+                        </depends>
+                    </field>
+                    <field id="sf_password" translate="label comment" type="password" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>SalesForce password</label>
+                        <validate>required-entry</validate>
+                        <depends>
+                            <field id="enable">1</field>
+                        </depends>
+                    </field>
+                    <field id="sf_token" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>SalesForce token</label>
+                        <validate>required-entry</validate>
+                        <depends>
+                            <field id="enable">1</field>
+                        </depends>
+                    </field>
+                    <field id="wsdl_file_path" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>SalesForce wsdl file path</label>
+                        <validate>required-entry</validate>
+                        <depends>
+                            <field id="enable">1</field>
+                        </depends>
+                    </field>
+                    <field id="log_file" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Log file</label>
+                        <validate>required-entry</validate>
+                        <depends>
+                            <field id="enable">1</field>
+                        </depends>
+                    </field>
+                    <field id="error_log_file" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Error log file</label>
+                        <validate>required-entry</validate>
+                        <depends>
+                            <field id="enable">1</field>
+                        </depends>
+                    </field>
+                    <field id="email_send_limit" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Email send limit</label>
+                        <validate>required-entry</validate>
+                        <depends>
+                            <field id="enable">1</field>
+                        </depends>
+                    </field>
+                    <field id="sf_email_object_id" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>SalesForce Email ObjectID</label>
+                        <validate>required-entry</validate>
+                        <depends>
+                            <field id="enable">1</field>
+                        </depends>
+                    </field>
+                </group>
+        </section>
+    </system>
+</config>

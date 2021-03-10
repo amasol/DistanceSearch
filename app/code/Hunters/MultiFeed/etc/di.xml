@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	<preference for="Hunters\MultiFeed\Api\QueueRepositoryInterface" type="Hunters\MultiFeed\Model\QueueRepository"/>
+	<preference for="Hunters\MultiFeed\Api\Data\QueueInterface" type="Hunters\MultiFeed\Model\Data\Queue"/>
+	<preference for="Hunters\MultiFeed\Api\Data\QueueSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+	<virtualType name="Hunters\MultiFeed\Model\ResourceModel\Queue\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+		<arguments>
+			<argument name="mainTable" xsi:type="string">hunters_multifeed_queue</argument>
+			<argument name="resourceModel" xsi:type="string">Hunters\MultiFeed\Model\ResourceModel\Queue\Collection</argument>
+		</arguments>
+	</virtualType>
+	<type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+		<arguments>
+			<argument name="collections" xsi:type="array">
+				<item name="hunters_multifeed_queue_listing_data_source" xsi:type="string">Hunters\MultiFeed\Model\ResourceModel\Queue\Grid\Collection</item>
+			</argument>
+		</arguments>
+	</type>
+<!--	<type name="Toppik\Subscriptions\Model\Profile">
+			<plugin name="addSubsStatusChangeToQueue" type="Hunters\MultiFeed\Plugin\Profile" sortOrder="1" disabled="false"/>
+	</type> -->
+	<type name="Magento\Company\Model\ResourceModel\Company">
+		<plugin name="addChangeToQueue" type="Hunters\MultiFeed\Plugin\Magento\Company\Model\ResourceModel\Company" sortOrder="1" disabled="false"/>
+	</type>
+	<type name="Magento\Customer\Model\Customer">
+		<plugin name="Hunters_CustomerAfterSave" type="Hunters\MultiFeed\Plugin\Magento\Customer\Model\Customer" sortOrder="10" disabled="false" />
+	</type>
+</config>

@@ -1,0 +1,170 @@
+
+<div class="js-avacert-cantainer" style="display: none;">
+    <section class="admin__page-section">
+        <div class="admin__page-section-title">
+            <strong class="title"><?php echo ('Multi-State Resale Certificate')?></strong>
+        </div>
+
+        <div id="customer_account_fieds" class="admin__page-section-content">
+            <form id="avacert_form" enctype="multipart/form-data">
+
+
+              <fieldset class="fieldset admin__fieldset">
+                  <div class="admin__field field" data-ui-id="new-customer-fieldset-element-form-field-email">
+                      <label class="label admin__field-label" for="customer_email" data-ui-id="new-customer-fieldset-element-text-order-new-customer-email-label">
+                          <span><?php echo __('exposureZone')?></span>
+                      </label>
+                      <div class="admin__field-control control"><?php echo $block->getZonesHtmlSelect('exposureZone', 'zone'); ?></div>
+
+                  </div>
+
+
+                  <div class="admin__field field" data-ui-id="new-customer-fieldset-element-form-field-email">
+                      <label class="label admin__field-label" for="customer_email" data-ui-id="new-customer-fieldset-element-text-order-new-customer-email-label">
+                          <span><?php echo __('expectedTaxCode')?></span>
+                      </label>
+                      <div class="admin__field-control control"><?php echo $block->getExemptReasonsSelect('expectedTaxCode', 'reason', 71, ''); ?></div>
+
+                    </div>
+
+                    <div class="admin__field field" data-ui-id="new-customer-fieldset-element-form-field-email">
+                        <label class="label admin__field-label" for="customer_email" data-ui-id="new-customer-fieldset-element-text-order-new-customer-email-label">
+                            <span><?php echo 'Contact IDs'; //echo __('customers')?></span>
+                        </label>
+
+                        <div class="admin__field-control control">
+                            <input id="customers" name="customers" data-ui-id="new-customer-fieldset-element-text-order-new-customer-email" value="" class="input-text admin__control-text" autocomplete="off" aria-required="true" type="text">
+                        </div>
+                    </div>
+
+                    <div class="admin__field field" data-ui-id="new-customer-fieldset-element-form-field-email">
+                        <label class="label admin__field-label" for="customer_email" data-ui-id="new-customer-fieldset-element-text-order-new-customer-email-label">
+                            <span><?php echo __('pdf')?></span>
+                        </label>
+
+                        <div class="admin__field-control control">
+                            <input onchange="previewFile()" id="file" name="file" accept=".pdf" data-ui-id="new-customer-fieldset-element-text-order-new-customer-email" value="" class="input-text admin__control-text" autocomplete="off" aria-required="true" type="file">
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </section>
+</div>
+
+<script type="text/javascript">
+
+function previewFile() {
+  var file    = document.querySelector('input[type=file]').files[0];
+  var reader  = new FileReader();
+
+  reader.addEventListener("load", function () {
+    document.avaCertFile = reader.result;
+  }, false);
+
+  if (file) {
+    reader.readAsDataURL(file);
+  }
+}
+
+    define(
+        'avacert',
+        [
+            'jquery',
+            'Magento_Ui/js/modal/modal'
+        ],
+        function(jQuery, modal) {
+            var Ava;
+            Ava = new Function();
+
+            Ava.prototype = {
+                initialize : function() {
+                    this.container = jQuery('.js-avacert-cantainer');
+                    this.initEvents();
+                },
+
+                initEvents: function() {
+                    var __this  = this;
+
+                    var popup = modal(
+                        {
+                            type: 'popup',
+                            responsive: true,
+                            innerScroll: true,
+                            clickableOverlay: true,
+                            modalClass: 'subscriptionadditem-popup',
+                            buttons: [
+                                {
+                                    text: jQuery.mage.__('Cancel'),
+                                    class: 'action',
+                                    click: function () {
+                                        this.closeModal();
+                                    }
+                                },
+                                {
+                                    text: jQuery.mage.__('Submit'),
+                                    class: 'action primary',
+                                    click: function () {
+                                        var url = '<?php echo $this->getUrl('avacert/cert/add')?>';
+                                        var data = jQuery('#avacert_form').serialize(true);
+
+                                        data += '&pdf=' + document.avaCertFile;
+
+                                        data['form_key'] = FORM_KEY;
+
+                                        jQuery.ajax({
+                                            url: url,
+                                            data: data,
+                                            type: 'POST',
+                                            showLoader: true,
+                                            success: function(r) {
+                                                if(r.id) {
+                                                    alert('Certificate ' + r.id + ' has been created');
+                                                    __this.container.modal('closeModal');
+                                                    __this.container.find('form').trigger('reset');
+
+                                                } else if(r.errorMessage) {
+                                                    alert(r.errorMessage);
+                                                } else {
+                                                    alert(jQuery.mage.__('Unknown error'));
+                                                }
+                                            },
+                                            error: function(r) {
+                                                if(r.message) {
+                                                    alert(r.message);
+                                                } else if(r.errorMessage) {
+                                                    alert(r.errorMessage);
+                                                } else {
+                                                    alert(jQuery.mage.__('Unknown error'));
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            ]
+                        },
+                        __this.container
+                    );
+
+                    var link = jQuery('.js-avacert');
+
+                    link.attr('onclick', null);
+
+                    link.on('click', function(e) {
+                        e.preventDefault();
+                        __this.container.modal('openModal');
+                        return false;
+                    });
+                }
+            };
+
+            var avaCert = new Ava();
+            avaCert.initialize();
+        }
+    );
+</script>
+
+<script type="text/javascript">
+    require(['avacert'], function() {});
+</script>
+

@@ -22,7 +22,10 @@ class Ajax extends \Magento\Framework\App\Action\Action
     private $jsonHelper;
 
     /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
+     * @param \Magento\Framework\View\Result\PageFactory $resultFactory
+     * @param SearchZip $searchZip
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -39,16 +42,14 @@ class Ajax extends \Magento\Framework\App\Action\Action
     public function execute()
     {
         /**
-         * @return \Magento\Framework\Controller\Result\Raw $response
+         * @var \Magento\Framework\Controller\Result\Raw $response
          **/
         $response = $this->resultFactory->create(ResultFactory::TYPE_RAW);
 
         $response->setHeader('Content-type', 'text/plain');
         if ($this->getRequest()->isAjax()) {
-
-            $post = $this->getRequest()->getParam('zip');
-            $zip = $this->searchZip->total($post);
-
+            $getZip = $this->getRequest()->getParam('zip') ?? null;
+            $zip = $this->searchZip->total($getZip);
             $response->setContents(
                 $this->jsonHelper->jsonEncode(
                     [

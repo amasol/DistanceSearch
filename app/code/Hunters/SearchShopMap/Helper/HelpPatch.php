@@ -9,26 +9,21 @@ class HelpPatch
     public $searchZip;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection
+     * @var \Magento\Company\Model\ResourceModel\Company\Collection
      */
-    public $connection;
-
-    /**
-     * @var \Hunters\SearchShopMap\Model\ResourceModel\Collection\Friends
-     */
-    public $friendsCollectionFactory;
+    public $companyCollectionFactory;
 
     /**
      * HelpPatch constructor
+     * @param \Hunters\SearchShopMap\Service\SearchZip $searchZip
+     * @param \Magento\Company\Model\ResourceModel\Company\Collection $companyCollectionFactory
      */
     public function __construct(
-        \Magento\Framework\App\ResourceConnection $connection,
         \Hunters\SearchShopMap\Service\SearchZip $searchZip,
-        \Hunters\SearchShopMap\Model\ResourceModel\Collection\FriendsFactory $friendsCollectionFactory
+        \Magento\Company\Model\ResourceModel\Company\Collection $companyCollectionFactory
     ) {
         $this->searchZip = $searchZip;
-        $this->connection = $connection;
-        $this->friendsCollectionFactory = $friendsCollectionFactory;
+        $this->companyCollectionFactory = $companyCollectionFactory;
     }
 
     public function coordinate($zip)
@@ -46,20 +41,16 @@ class HelpPatch
 
     public function validData()
     {
-        $model = $this->friendsCollectionFactory->create();
-        $model->getItems();
-        $allZipArray = $model->getColumnValues("postcode");
+        $allZipArray = $this->companyCollectionFactory->getColumnValues('postcode');
 //        удалить ограничение
-        $allZipArray = array_slice($allZipArray, 0, 10);
+        $allZipArray = array_slice($allZipArray, 0, 7);
         $resultIncorrectZip = array_map(array($this, 'coordinate'), $allZipArray);
 
 //        echo '<pre>';
-//        print_r($resultIncorrectZip);
+//        print_r($model);
 //        echo "test";
 //        echo '</pre>';
 //        exit();
-
-
         $resultIncorrectArray = array_filter($resultIncorrectZip, function($element) {
             if ($element != NULL) {
                 return $element;

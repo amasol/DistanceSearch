@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+	<menu>
+		<add id="Hunters::top_level" module="Hunters_MultiFeed" resource="Magento_Backend::content" sortOrder="9999" title="Hunters"/>
+		<add action="hunters_multifeed/queue/index" id="Hunters_MultiFeed::hunters_multifeed_queue" module="Hunters_MultiFeed" parent="Hunters::top_level" resource="Magento_Backend::content" sortOrder="9999" title="MultiFeed Queue"/>
+	</menu>
+</config>
