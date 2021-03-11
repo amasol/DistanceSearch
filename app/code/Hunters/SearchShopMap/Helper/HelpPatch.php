@@ -26,10 +26,10 @@ class HelpPatch
         $this->companyCollectionFactory = $companyCollectionFactory;
     }
 
-    public function coordinate($zip)
+    public function coordinate($company)
     {
         sleep(0.2);
-        $address = $this->searchZip->total($zip);
+        $address = $this->searchZip->total($company);
         if ($address != NULL){
             $result = json_decode($address, true);
             return $result;
@@ -41,16 +41,23 @@ class HelpPatch
 
     public function validData()
     {
-        $allZipArray = $this->companyCollectionFactory->getColumnValues('postcode');
-//        удалить ограничение
-        $allZipArray = array_slice($allZipArray, 0, 7);
-        $resultIncorrectZip = array_map(array($this, 'coordinate'), $allZipArray);
+        $company = $this->companyCollectionFactory->getData();
+        $result = array();
+        foreach ($company as $all){
+            $result[] = [
+                'company_name' => mb_convert_case($all['company_name'], 2),
+                'company_email' => mb_strtolower($all['company_email']),
+                'telephone' => $all['telephone'],
+                'city' => mb_convert_case($all['city'], 2),
+                'street' => mb_convert_case($all['street'], 2),
+                'postcode' => $all['postcode']
+            ];
+        }
+//        удалить ограничение!!!!!!
+        $result = array_slice($result, 0, 9);
 
-//        echo '<pre>';
-//        print_r($model);
-//        echo "test";
-//        echo '</pre>';
-//        exit();
+
+        $resultIncorrectZip = array_map(array($this, 'coordinate'), $result);
         $resultIncorrectArray = array_filter($resultIncorrectZip, function($element) {
             if ($element != NULL) {
                 return $element;
@@ -59,6 +66,7 @@ class HelpPatch
         $result = array_values($resultIncorrectArray);
         return $result;
     }
+
 
     public function addDataTable($zipArr)
     {
