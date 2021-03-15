@@ -15,18 +15,30 @@ class Search implements \Magento\Framework\View\Element\Block\ArgumentInterface
      */
     public $saveZipCodeCollectionFactory;
 
+
+    public $searchZip;
+    public $helpPatch;
+
     public function __construct(
-        \Hunters\SearchShopMap\Model\ResourceModel\Collection\SaveZipCodeFactory $saveZipCodeCollectionFactory
+        \Hunters\SearchShopMap\Model\ResourceModel\Collection\SaveZipCodeFactory $saveZipCodeCollectionFactory,
+
+        \Hunters\SearchShopMap\Service\SearchZip $searchZip,
+        \Hunters\SearchShopMap\Helper\HelpPatch $helpPatch
     ) {
         $this->saveZipCodeCollectionFactory = $saveZipCodeCollectionFactory;
+        $this->searchZip = $searchZip;
+        $this->helpPatch = $helpPatch;
     }
     
     public function coordinateArray()
     {
         $model = $this->saveZipCodeCollectionFactory->create();
-        $model->getItems();
-        $noSortArray = $model->getColumnValues("coordinate");
-        $array = array_values(array_unique($noSortArray, SORT_REGULAR));
+        $array = $model->getColumnValues("coordinate");
+
+//        $this->searchZip->total();
+//        $this->helpPatch->validData();
+
+
         $allZipArray = array_map('json_decode', $array);
         return $allZipArray;
     }

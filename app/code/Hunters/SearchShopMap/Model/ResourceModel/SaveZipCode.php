@@ -6,6 +6,6 @@ class SaveZipCode extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     protected function _construct()
     {
-        $this->_init('AddressZipCode', 'entity_id');
+        $this->_init('address_zip_code', 'entity_id');
     }
 }

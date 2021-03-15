@@ -25,32 +25,72 @@ class HelpPatch
         $this->searchZip = $searchZip;
         $this->companyCollectionFactory = $companyCollectionFactory;
     }
+//
+//    public function coordinate($zip)
+//    {
+//        sleep(0.2);
+//        $address = $this->searchZip->total($zip);
+//
+//
+//        if ($address != NULL){
+//            $result = json_decode($address, true);
+//            return $result;
+//        }
+//        else {
+//            return NULL;
+//        }
+//    }
 
-    public function coordinate($zip)
+
+    public function coordinate($coordinate)
     {
+//
+//         echo "<pre>";
+//        print_r($coordinate);
+//        echo "</pre>";
+//        exit();
         sleep(0.2);
-        $address = $this->searchZip->total($zip);
-        if ($address != NULL){
-            $result = json_decode($address, true);
-            return $result;
-        }
-        else {
-            return NULL;
-        }
+//        $address = $this->searchZip->total($coordinate['postcode']);
+        $address = $this->searchZip->total($coordinate);
+
+        $result = json_decode($address, true);
+        return $result;
     }
+
 
     public function validData()
     {
-        $allZipArray = $this->companyCollectionFactory->getColumnValues('postcode');
-//        удалить ограничение
-        $allZipArray = array_slice($allZipArray, 0, 7);
-        $resultIncorrectZip = array_map(array($this, 'coordinate'), $allZipArray);
+//        $allZipArray = $this->companyCollectionFactory->getColumnValues('postcode');
+        $company = $this->companyCollectionFactory->getData();
 
-//        echo '<pre>';
-//        print_r($model);
-//        echo "test";
-//        echo '</pre>';
+//        удалить ограничение
+//        $allZipArray = array_slice($allZipArray, 0, 7);
+        $company = array_slice($company, 0, 7);
+
+        $result = array();
+        foreach ($company as $all){
+            $result[] = [
+                'company_id' =>$all['entity_id'] ,
+                'company_name' => mb_convert_case($all['company_name'], 2),
+                'company_email' => mb_strtolower($all['company_email']),
+                'telephone' => $all['telephone'],
+                'city' => mb_convert_case($all['city'], 2),
+                'street' => mb_convert_case($all['street'], 2),
+                'postcode' => $all['postcode']
+            ];
+        }
+
+//        $resultIncorrectZip = array_map(array($this, 'coordinate'), $allZipArray);
+        $resultIncorrectZip = array_map(array($this, 'coordinate'), $result);
+
+
+
+//        echo "<pre>";
+//        print_r($result);
+//        echo "</pre>";
 //        exit();
+
+
         $resultIncorrectArray = array_filter($resultIncorrectZip, function($element) {
             if ($element != NULL) {
                 return $element;
@@ -59,6 +99,11 @@ class HelpPatch
         $result = array_values($resultIncorrectArray);
         return $result;
     }
+
+
+
+
+
 
     public function addDataTable($zipArr)
     {

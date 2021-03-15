@@ -39,14 +39,14 @@ class SearchZip
     public function total($zip)
     {
         $result = array();
-        if ($this->validateZipCode($zip)) {
+        if ($this->validateZipCode($zip['postcode'])) {
             $client = $this->clientFactory->create(['config' => [
             'base_uri' => self::API_REQUEST_URI
         ]]);
 
         $params = [
             'query' => [
-                'components' => 'postal_code:'.$zip,
+                'components' => 'postal_code:'.$zip['postcode'],
                 'key' => 'AIzaSyBSiWyPtBS2Esy_ObhOSQJT81AfU3jyXcQ'
             ]
         ];
@@ -63,9 +63,10 @@ class SearchZip
 
         $responseDataArray = json_decode($response->getBody()->getContents(), true);
             if ($responseDataArray['results']) {
-                $result['postcode'] = $zip;
+                $result['postcode'] = $zip['postcode'];
                 $result['state'] = $responseDataArray['results'][0]['address_components'][2]['long_name'];
                 $result['coordinate'] = json_encode($responseDataArray['results'][0]['geometry']['location']);
+                $result['company_id'] = $zip['company_id'];
                 return json_encode($result);
             }
         } else
