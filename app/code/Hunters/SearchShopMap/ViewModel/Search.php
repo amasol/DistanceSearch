@@ -15,19 +15,37 @@ class Search implements \Magento\Framework\View\Element\Block\ArgumentInterface
      */
     public $saveZipCodeCollectionFactory;
 
+
+    private $infoView;
+
     public function __construct(
-        \Hunters\SearchShopMap\Model\ResourceModel\Collection\SaveZipCodeFactory $saveZipCodeCollectionFactory
+        \Hunters\SearchShopMap\Model\ResourceModel\Collection\SaveZipCodeFactory $saveZipCodeCollectionFactory,
+
+        \Hunters\SearchShopMap\Setup\Patch\Schema\AddAddressDatabase $shema,
+        \Hunters\SearchShopMap\Controller\Page\Coordinate $infoView
     ) {
         $this->saveZipCodeCollectionFactory = $saveZipCodeCollectionFactory;
+
+        $this->shema = $shema;
+        $this->infoView = $infoView;
     }
     
     public function coordinateArray()
     {
+//        удалить это не с моего модуля
+//        $this->shema->apply();
+//        $this->infoView->execute();
+
         $model = $this->saveZipCodeCollectionFactory->create();
-        $model->getItems();
-        $noSortArray = $model->getColumnValues("coordinate");
-        $array = array_values(array_unique($noSortArray, SORT_REGULAR));
-        $allZipArray = array_map('json_decode', $array);
-        return $allZipArray;
+
+        $coordinate = $model->getData();
+//        echo "<pre>";
+//        print_r($coordinate);
+//        echo "</pre>";
+
+
+//       на выходе мы имеем
+//        https://i.imgur.com/Cy23d1W.png
+        return $coordinate;
     }
 }

@@ -36,41 +36,46 @@ class SearchZip
         }
 	}
 
+//    public function total($zip, $entityId = 0)
     public function total($zip)
     {
         $result = array();
         if ($this->validateZipCode($zip)) {
             $client = $this->clientFactory->create(['config' => [
-            'base_uri' => self::API_REQUEST_URI
-        ]]);
+                'base_uri' => self::API_REQUEST_URI
+            ]]);
 
-        $params = [
-            'query' => [
-                'components' => 'postal_code:'.$zip,
-                'key' => 'AIzaSyBSiWyPtBS2Esy_ObhOSQJT81AfU3jyXcQ'
-            ]
-        ];
-        $response = null;
-        try {
-            $response = $client->request(
-                'GET',
-                'maps/api/geocode/json?',
-                $params
-            );
-        } catch (GuzzleException $exception) {
-            return $exception->getMessage();
-        }
+            $params = [
+                'query' => [
+                    'components' => 'postal_code:'.$zip,
+                    'key' => 'AIzaSyBSiWyPtBS2Esy_ObhOSQJT81AfU3jyXcQ'
+                ]
+            ];
+            $response = null;
+            try {
+                $response = $client->request(
+                    'GET',
+                    'maps/api/geocode/json?',
+                    $params
+                );
+            } catch (GuzzleException $exception) {
+                #todo logger
+//                \Psr\Logger $logger
+//                $this->logger->debuge("Message " . $exception->getMessage());
+                return [];
+//                return $exception->getMessage();
+            }
 
-        $responseDataArray = json_decode($response->getBody()->getContents(), true);
+            $responseDataArray = json_decode($response->getBody()->getContents(), true);
             if ($responseDataArray['results']) {
                 $result['postcode'] = $zip;
                 $result['state'] = $responseDataArray['results'][0]['address_components'][2]['long_name'];
                 $result['coordinate'] = json_encode($responseDataArray['results'][0]['geometry']['location']);
-                return json_encode($result);
+//                $result['company_id'] = $entityId;
+                return $result;
             }
-        } else
-            {
-            return NULL;
+        } else {
+            return [];
         }
     }
 }
