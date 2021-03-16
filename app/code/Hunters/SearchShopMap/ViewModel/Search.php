@@ -41,19 +41,16 @@ class Search implements \Magento\Framework\View\Element\Block\ArgumentInterface
 
 //      мы достаем все магазины в том числе и с повторяющеймс язипками .
         $array = $model->getColumnValues("coordinate");
+//        $array = $model->getColumnValues("street");
 
-//        $this->searchZip->total("1231234");
 //        $this->helpPatch->validData();
 //        $this->shema->apply();
 //        $this->ajax->execute();
 
 //        $array = array_values(array_unique($array, SORT_REGULAR));
         $allZipArray = array_map('json_decode', $array);
+//        $allZipArray = array_map('json_encode', $array);
 
-//        echo "<pre>";
-//        print_r($allZipArray);
-//        echo "</pre>";
-//        exit();
         return $allZipArray;
     }
 }

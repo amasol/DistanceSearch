@@ -82,7 +82,7 @@ class SearchZip
     }
 
 
-
+//      эта функция испльзуется для получение данных в начем ajax контроллере ....
     public function totalTwo($zip)
     {
         $result = array();

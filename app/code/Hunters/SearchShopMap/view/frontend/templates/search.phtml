@@ -38,7 +38,13 @@ $resultCoordinate = $viewModel->coordinateArray();
 <script type="text/javascript">
     require([ 'jquery', 'jquery/ui'], function($){
         $(document).ready(function($) {
+
+
+
             let array_cordinate = <?php echo json_encode($resultCoordinate); ?>;
+
+
+
             var s = '<script src="https://polyfill.io/v3/polyfill.min.js?features=default"/>';
             var ss = '<script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"/>';
             $('head').append(s);
@@ -61,9 +67,9 @@ $resultCoordinate = $viewModel->coordinateArray();
                         // document.write(response.responseText);
                         if (($.parseJSON(res.loc)) !== null) {
                             var coordinate = $.parseJSON(($.parseJSON(res.loc)).coordinate);
-                            var state = ($.parseJSON(res.loc)).state;
+                            // var state = ($.parseJSON(res.loc)).state;
                             $(".coordinate").text("Your coordinates: lat = " + coordinate.lat + "; lng = " + coordinate.lng + ";");
-                            $(".state").text("Your coordinates:  " + state + ";");
+                            // $(".state").text("Your coordinates:  " + state + ";");
                             initMap(coordinate);
                         }
                         else {
@@ -92,6 +98,8 @@ $resultCoordinate = $viewModel->coordinateArray();
                         scaledSize: new google.maps.Size(35, 35)
                     }
                 });
+
+
                 const labels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                 const markers = locations.map((location, i) => {
                     return new google.maps.Marker({
