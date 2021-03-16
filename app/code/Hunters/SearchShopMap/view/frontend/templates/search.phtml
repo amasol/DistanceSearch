@@ -3,19 +3,14 @@
 /**@var Hunters\SearchShopMap\ViewModel\Search $viewModel*/
 $viewModel = $this->getData('viewModel');
 
-//$viewModel->coordinateArray();
-//$myCollection = $viewModel->getMyCustomCollection()->getData();
-//$resultCoordinate = $viewModel->coordinateArray($myCollection);
-
+// доставю все данные с таблицы
 $resultCoordinate = $viewModel->coordinateArray();
 
-//echo "<pre>";
-//print_r($resultCoordinate);
-//echo "</pre>";
-//exit();
 
-
-
+//        echo "<pre>";
+//        print_r($resultCoordinate);
+//        echo "</pre>";
+//        exit();
 ?>
 
 <form action="#" accept-charset="utf-8" method="POST" onSubmit="return false;">
@@ -35,16 +30,16 @@ $resultCoordinate = $viewModel->coordinateArray();
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSiWyPtBS2Esy_ObhOSQJT81AfU3jyXcQ&callback=initMap">
 </script>
 
+<!--    вывод информации по магазину    -->
+<div class="shop-info" style="display: none">
+    <p>Shop data</p>
+    <span class="name">Name: <span></span></span>
+</div>
+
 <script type="text/javascript">
     require([ 'jquery', 'jquery/ui'], function($){
         $(document).ready(function($) {
-
-
-
             let array_cordinate = <?php echo json_encode($resultCoordinate); ?>;
-
-
-
             var s = '<script src="https://polyfill.io/v3/polyfill.min.js?features=default"/>';
             var ss = '<script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"/>';
             $('head').append(s);
@@ -60,56 +55,105 @@ $resultCoordinate = $viewModel->coordinateArray();
                     },
                     showLoader: true,
                     cache: false,
-
                     complete: function(response) {
                         var res = $.parseJSON(response.responseText);
-                        // console.log(res);
-                        // document.write(response.responseText);
                         if (($.parseJSON(res.loc)) !== null) {
                             var coordinate = $.parseJSON(($.parseJSON(res.loc)).coordinate);
-                            // var state = ($.parseJSON(res.loc)).state;
                             $(".coordinate").text("Your coordinates: lat = " + coordinate.lat + "; lng = " + coordinate.lng + ";");
-                            // $(".state").text("Your coordinates:  " + state + ";");
                             initMap(coordinate);
                         }
                         else {
                             alert("No search you zip: "+zip+" code!");
                         }
                     },
-
                     error: function (xhr, status, errorThrown) {
                         console.log('Error happens. Try again.');
                     }
                 });
             });
 
+
+
             const  locations = array_cordinate;
             function initMap(myCoordinate) {
-                const  myLatLng = myCoordinate;
+                const myLatLng = myCoordinate;
+
                 const map = new google.maps.Map(document.getElementById("google-map"), {
                     zoom: 13,
                     center: myLatLng
                 });
-                new google.maps.Marker({
+
+                const marker = new google.maps.Marker({
                     position: myLatLng, map,
-                    title: "My marker!",
+                    title: "Место где я нахожусь",
                     icon: {
                         url: "https://upload.wikimedia.org/wikipedia/commons/3/38/Simpleicons_Places_flag-map-marker-1.svg",
                         scaledSize: new google.maps.Size(35, 35)
-                    }
+                    },
+                    click: true,
+
+                });
+
+                //  выводи наши координаты моего места положения
+                google.maps.event.addListener(marker, 'click', function() {
+                    console.log(marker.getPosition().lat());
+                    console.log(marker.getPosition().lng());
                 });
 
 
                 const labels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                const markers = locations.map((location, i) => {
+
+                const my_shop = locations.map((location, i) => {
                     return new google.maps.Marker({
                         position: location,
                         label: labels[i % labels.length],
+                        click: true,
                     });
                 });
-                new MarkerClusterer(map, markers, {
+
+                new MarkerClusterer(map, my_shop, {
                     imagePath: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
                 });
+
+
+
+                $.each(my_shop, (i, pos) => {
+                    google.maps.event.addListener(pos, 'click', function() {
+                        let positionUrl = "<?php echo $this->getUrl('searchjson/page/coordinate', ['_secure' => false]) ?>";
+                        // $.ajax({
+                        //     url: positionUrl,
+                        //     type: "POST",
+                        //     data: {
+                        //         lat: pos.getPosition().lat(),
+                        //         lng: pos.getPosition().lng()
+                        //     },
+                        //     showLoader: true,
+                        //     cache: false,
+                        //     success: function (data) {
+                        //         if (data.errors === false) {
+                        //
+                        //             let shopData = JSON.parse(data.data);
+                        //
+                        //             // $(".shop-info .name span").text(shopData.name);
+                        //             // $(".shop-info").show();
+                        //             console.log("Success");
+                        //             console.log(data);
+                        //         } else {
+                        //             console.log("Error");
+                        //             console.log(data);
+                        //         }
+                        //
+                        //     },
+                        //     error: function (xhr, status, errorThrown) {
+                        //         console.log('Error happens. Try again.');
+                        //     }                        })
+                        console.log("points " + pos.getPosition().lat());
+                        console.log("krakazabra " + pos.getPosition().lng());
+                    });
+                });
+
+
+
             }
         });
     });

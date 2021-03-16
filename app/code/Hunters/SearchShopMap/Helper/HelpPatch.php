@@ -54,7 +54,6 @@ class HelpPatch
         }
 
         $resultIncorrectZip = array_map(array($this, 'coordinate'), $result);
-
         $resultIncorrectArray = array_filter($resultIncorrectZip, function($element) {
             if ($element != NULL) {
                 return $element;
