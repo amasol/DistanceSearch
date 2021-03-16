@@ -54,10 +54,10 @@ class AddAddressDatabase implements SchemaPatchInterface
 
 //      проверка фенкции validData на google API
         $zipArr = array_values($this->helpPatch->validData());
-
-//        $arr = $this->helpPatch->addDataTable($zipArr);
-//        $connection->insertMultiple($table, $arr);
-
+//        echo "<pre>";
+//        print_r($zipArr);
+//        echo "</pre>";
+//        exit();
         $connection->insertMultiple($table, $zipArr);
         $this->moduleDataSetup->endSetup();
     }

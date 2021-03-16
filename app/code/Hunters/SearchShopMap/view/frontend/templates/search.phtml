@@ -9,6 +9,11 @@ $viewModel = $this->getData('viewModel');
 
 $resultCoordinate = $viewModel->coordinateArray();
 
+//echo "<pre>";
+//print_r($resultCoordinate);
+//echo "</pre>";
+//exit();
+
 
 
 ?>
@@ -49,9 +54,11 @@ $resultCoordinate = $viewModel->coordinateArray();
                     },
                     showLoader: true,
                     cache: false,
+
                     complete: function(response) {
-                        console.log(response);
                         var res = $.parseJSON(response.responseText);
+                        // console.log(res);
+                        // document.write(response.responseText);
                         if (($.parseJSON(res.loc)) !== null) {
                             var coordinate = $.parseJSON(($.parseJSON(res.loc)).coordinate);
                             var state = ($.parseJSON(res.loc)).state;
@@ -63,6 +70,7 @@ $resultCoordinate = $viewModel->coordinateArray();
                             alert("No search you zip: "+zip+" code!");
                         }
                     },
+
                     error: function (xhr, status, errorThrown) {
                         console.log('Error happens. Try again.');
                     }

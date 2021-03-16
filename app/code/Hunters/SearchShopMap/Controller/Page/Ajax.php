@@ -46,10 +46,12 @@ class Ajax extends \Magento\Framework\App\Action\Action
          **/
         $response = $this->resultFactory->create(ResultFactory::TYPE_RAW);
 
+
         $response->setHeader('Content-type', 'text/plain');
         if ($this->getRequest()->isAjax()) {
             $getZip = $this->getRequest()->getParam('zip') ?? null;
-            $zip = $this->searchZip->total($getZip);
+
+            $zip = $this->searchZip->totalTwo($getZip);
             $response->setContents(
                 $this->jsonHelper->jsonEncode(
                     [

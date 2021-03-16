@@ -6,6 +6,11 @@
         <column xsi:type="varchar" name="postcode" nullable="false" length="255" comment="Postcode"/>
         <column xsi:type="varchar" name="state" nullable="false" length="255" comment="State"/>
         <column xsi:type="varchar" name="coordinate" nullable="false" length="255" comment="Сoordinate"/>
+        <column xsi:type="varchar" name="company_name" nullable="false" length="30" comment="Company name"/>
+        <column xsi:type="varchar" name="company_email" nullable="false" length="30" comment="Company email"/>
+        <column xsi:type="varchar" name="city" nullable="false" length="30" comment="City"/>
+        <column xsi:type="varchar" name="street" nullable="false" length="30" comment="Street"/>
+        <column xsi:type="varchar" name="telephone" nullable="false" length="30" comment="Telephone"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>

@@ -36,17 +36,18 @@ class SearchZip
         }
 	}
 
-    public function total($zip)
+    public function total($coordinate)
     {
+
         $result = array();
-        if ($this->validateZipCode($zip['postcode'])) {
+        if ($this->validateZipCode($coordinate['postcode'])) {
             $client = $this->clientFactory->create(['config' => [
             'base_uri' => self::API_REQUEST_URI
         ]]);
 
         $params = [
             'query' => [
-                'components' => 'postal_code:'.$zip['postcode'],
+                'components' => 'postal_code:'.$coordinate['postcode'],
                 'key' => 'AIzaSyBSiWyPtBS2Esy_ObhOSQJT81AfU3jyXcQ'
             ]
         ];
@@ -62,15 +63,59 @@ class SearchZip
         }
 
         $responseDataArray = json_decode($response->getBody()->getContents(), true);
-            if ($responseDataArray['results']) {
-                $result['postcode'] = $zip['postcode'];
+            if (isset($responseDataArray['results']) && isset($coordinate['company_id'])) {
+
+                $result['postcode'] = $coordinate['postcode'];
                 $result['state'] = $responseDataArray['results'][0]['address_components'][2]['long_name'];
                 $result['coordinate'] = json_encode($responseDataArray['results'][0]['geometry']['location']);
-                $result['company_id'] = $zip['company_id'];
+                $result['company_id'] = $coordinate['company_id'];
+                $result['company_name'] = $coordinate['company_name'];
+                $result['company_email'] = $coordinate['company_email'];
+                $result['telephone'] = $coordinate['telephone'];
+                $result['city'] = $coordinate['city'];
+                $result['street'] = $coordinate['street'];
                 return json_encode($result);
             }
-        } else
-            {
+        } else {
+            return NULL;
+        }
+    }
+
+
+
+    public function totalTwo($zip)
+    {
+        $result = array();
+        if ($this->validateZipCode($zip)) {
+            $client = $this->clientFactory->create(['config' => [
+                'base_uri' => self::API_REQUEST_URI
+            ]]);
+
+            $params = [
+                'query' => [
+                    'components' => 'postal_code:' . $zip,
+                    'key' => 'AIzaSyBSiWyPtBS2Esy_ObhOSQJT81AfU3jyXcQ'
+                ]
+            ];
+            $response = null;
+            try {
+                $response = $client->request(
+                    'GET',
+                    'maps/api/geocode/json?',
+                    $params
+                );
+            } catch (GuzzleException $exception) {
+                return $exception->getMessage();
+            }
+
+            $responseDataArray = json_decode($response->getBody()->getContents(), true);
+            if ($responseDataArray['results']) {
+                $result['postcode'] = $zip;
+//                $result['state'] = $responseDataArray['results'][0]['address_components'][2]['long_name'];
+                $result['coordinate'] = json_encode($responseDataArray['results'][0]['geometry']['location']);
+                return json_encode($result);
+            }
+        } else {
             return NULL;
         }
     }

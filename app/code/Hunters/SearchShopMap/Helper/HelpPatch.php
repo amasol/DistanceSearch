@@ -25,48 +25,21 @@ class HelpPatch
         $this->searchZip = $searchZip;
         $this->companyCollectionFactory = $companyCollectionFactory;
     }
-//
-//    public function coordinate($zip)
-//    {
-//        sleep(0.2);
-//        $address = $this->searchZip->total($zip);
-//
-//
-//        if ($address != NULL){
-//            $result = json_decode($address, true);
-//            return $result;
-//        }
-//        else {
-//            return NULL;
-//        }
-//    }
-
 
     public function coordinate($coordinate)
     {
-//
-//         echo "<pre>";
-//        print_r($coordinate);
-//        echo "</pre>";
-//        exit();
         sleep(0.2);
-//        $address = $this->searchZip->total($coordinate['postcode']);
         $address = $this->searchZip->total($coordinate);
-
-        $result = json_decode($address, true);
-        return $result;
+        return json_decode($address, true);
     }
 
 
     public function validData()
     {
-//        $allZipArray = $this->companyCollectionFactory->getColumnValues('postcode');
         $company = $this->companyCollectionFactory->getData();
 
 //        удалить ограничение
-//        $allZipArray = array_slice($allZipArray, 0, 7);
         $company = array_slice($company, 0, 7);
-
         $result = array();
         foreach ($company as $all){
             $result[] = [
@@ -80,41 +53,14 @@ class HelpPatch
             ];
         }
 
-//        $resultIncorrectZip = array_map(array($this, 'coordinate'), $allZipArray);
         $resultIncorrectZip = array_map(array($this, 'coordinate'), $result);
-
-
-
-//        echo "<pre>";
-//        print_r($result);
-//        echo "</pre>";
-//        exit();
-
 
         $resultIncorrectArray = array_filter($resultIncorrectZip, function($element) {
             if ($element != NULL) {
                 return $element;
             }
         });
-        $result = array_values($resultIncorrectArray);
-        return $result;
-    }
-
-
-
-
-
-
-    public function addDataTable($zipArr)
-    {
-        $arr  = array();
-        $count = count($zipArr);
-
-        for ($i = 0; $i < $count; $i++) {
-            $arr[$i]['postcode'] = $zipArr[$i]['postcode'];
-            $arr[$i]['state'] = $zipArr[$i]['state'];
-            $arr[$i]['coordinate'] = $zipArr[$i]['coordinate'];
-        }
-        return $arr;
+        // возвращение отсортерованного и проиндексированного массива
+        return array_values($resultIncorrectArray);
     }
 }
