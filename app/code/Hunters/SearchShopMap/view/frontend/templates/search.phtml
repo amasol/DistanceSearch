@@ -36,6 +36,7 @@ $resultCoordinate = $viewModel->coordinateArray();
     <span class="name">Name: <span></span></span>
 </div>
 
+
 <script type="text/javascript">
     require([ 'jquery', 'jquery/ui'], function($){
         $(document).ready(function($) {
@@ -56,6 +57,7 @@ $resultCoordinate = $viewModel->coordinateArray();
                     showLoader: true,
                     cache: false,
                     complete: function(response) {
+                        // document.write(response.responseText);
                         var res = $.parseJSON(response.responseText);
                         if (($.parseJSON(res.loc)) !== null) {
                             var coordinate = $.parseJSON(($.parseJSON(res.loc)).coordinate);
@@ -116,37 +118,38 @@ $resultCoordinate = $viewModel->coordinateArray();
                 });
 
 
-
                 $.each(my_shop, (i, pos) => {
                     google.maps.event.addListener(pos, 'click', function() {
                         let positionUrl = "<?php echo $this->getUrl('searchjson/page/coordinate', ['_secure' => false]) ?>";
-                        // $.ajax({
-                        //     url: positionUrl,
-                        //     type: "POST",
-                        //     data: {
-                        //         lat: pos.getPosition().lat(),
-                        //         lng: pos.getPosition().lng()
-                        //     },
-                        //     showLoader: true,
-                        //     cache: false,
-                        //     success: function (data) {
-                        //         if (data.errors === false) {
-                        //
-                        //             let shopData = JSON.parse(data.data);
-                        //
-                        //             // $(".shop-info .name span").text(shopData.name);
-                        //             // $(".shop-info").show();
-                        //             console.log("Success");
-                        //             console.log(data);
-                        //         } else {
-                        //             console.log("Error");
-                        //             console.log(data);
-                        //         }
-                        //
-                        //     },
-                        //     error: function (xhr, status, errorThrown) {
-                        //         console.log('Error happens. Try again.');
-                        //     }                        })
+                        $.ajax({
+                            url: positionUrl,
+                            type: "POST",
+                            data: {
+                                // lat: lat,
+                                lat: pos.getPosition().lat(),
+                                lng: pos.getPosition().lng()
+                            },
+                            showLoader: true,
+                            cache: false,
+                            success: function (data) {
+                                if (data.errors === false) {
+                                    // let shopData = JSON.parse(data.data);
+                                    // document.write(JSON.parse(data.data));
+
+                                    // $(".shop-info .name span").text(shopData.name);
+                                    // $(".shop-info").show();
+                                    console.log("Success");
+                                    console.log(data);
+                                } else {
+                                    console.log("Error");
+                                    console.log(data);
+                                }
+
+                            },
+                            error: function (xhr, status, errorThrown) {
+                                console.log('Error happens. Try again.');
+                            }
+                        })
                         console.log("points " + pos.getPosition().lat());
                         console.log("krakazabra " + pos.getPosition().lng());
                     });

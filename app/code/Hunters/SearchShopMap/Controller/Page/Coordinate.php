@@ -32,7 +32,7 @@ class Coordinate extends Action
         RedirectFactory $redirectFactory,
 
 
-//        \Hunters\SearchShopMap\Helper\Data $helperData
+        \Hunters\SearchShopMap\Helper\Data $helperData
     )
     {
         $this->_customerSession = $session;
@@ -40,7 +40,7 @@ class Coordinate extends Action
         $this->_escaper = $escaper;
         $this->_redirectFactory = $redirectFactory->create();
 
-//        $this->helperData = $helperData;
+        $this->helperData = $helperData;
 
 
         parent::__construct($context);
@@ -49,33 +49,45 @@ class Coordinate extends Action
     public function execute()
     {
 
-        $this->infoView->coordinateArray();
-
+//        $this->infoView->coordinateArray();
+//        return "heloo world";
 
         $message = [
             'errors' => true,
             'message' => ''
         ];
 
+
         $post = $this->getRequest()->getPostValue();
         if (empty($post)) {
             return $this->_redirectFactory->setPath('/');
         }
 
+//        $message = [
+//            'errors' => false,
+//            'message' => $post,
+//        ];
+
+
         $lat = $post['lat'] ?? null;
         $lng = $post['lng'] ?? null;
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
 
-//        if ($lat && $lng) {
+
+        if ($lat && $lng) {
 //            #todo  Отримати даны по кординатах ы положити в масив
 //            $companyData = $this->helperData->getCompanyData(
 //                $this->helperData->getCompanyIdByCoordinate($lat, $lng));
-//
-//            $shopData = [
-//                "city" => "Kiev",
-//                "country" => "Ukraine",
-//                "shopName" => "Keke lol"
-//            ];
+
+
+
+            $shopData = [
+                "city" => "Kiev",
+                "country" => "Ukraine",
+                "shopName" => $post['lat'],
+                "name" => $post['lng'],
+                "errors" => false
+            ];
 //
 //            $message = [
 //                'errors' => false,
@@ -87,9 +99,9 @@ class Coordinate extends Action
 //                'errors' => true,
 //                'message' => __('Please set position data.')
 //            ];
-//        }
+        }
 
-        $resultJson->setData($message);
+        $resultJson->setData($shopData);
         return $resultJson;
     }
 
