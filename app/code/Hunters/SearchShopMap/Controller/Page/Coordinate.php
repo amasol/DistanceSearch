@@ -77,7 +77,7 @@ class Coordinate extends Action
         if ($lat && $lng) {
 //            #todo  Отримати даны по кординатах ы положити в масив
 //            $companyData = $this->helperData->getCompanyData(
-//                $this->helperData->getCompanyIdByCoordinate($lat, $lng));
+                $this->helperData->getCompanyIdByCoordinate($lat, $lng);
 
 
 

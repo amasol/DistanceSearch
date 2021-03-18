@@ -19,49 +19,54 @@ class Data extends AbstractHelper
 
     public function getCompanyIdByCoordinate($lat, $lng)
     {
-//        здесь нужно получить мои координаты по тем данным которые я отсылаю
-
         $model = $this->myCollectionFactory->create();
         $array_json = $model->getColumnValues("coordinate");
         $array = array_map('json_decode', $array_json);
 
+        $blabla = [
+            "lat" => $lat,
+            "lng" => $lng,
+        ];
 
-//        $this->myCollectionFactory->create()->getSelect()->addFieldToFilter(/* lat == $lat and lng == $lng*/);
+//        $dataArray  = $model->addFieldToFilter("coordinate", ['like' => json_encode($blabla)])->toArray();
+        $collection  = $model->addFieldToFilter("coordinate", ['eq' => json_encode($blabla)]);
 
-//         $blabla = [
+        foreach ($collection as $data) {
+            file_put_contents(BP. '/var/log/data.log', print_r($data->getData(), true) . "\n", FILE_APPEND | LOCK_EX);
+        }
+        die();
+//        file_put_contents(BP. '/var/log/data.log', print_r($dataArray, true)."\n", FILE_APPEND | LOCK_EX);
+
+//        здесь нужно получить мои координаты по тем данным которые я отсылаю
+//        $model = $this->myCollectionFactory->create();
+////        $allMyTables = $model->getColumnValues("coordinate");
+//        $allMyTables = $model->getData();
+//        $newArrayLatLng = [
 //             "lat" => $lat,
 //             "lng" => $lng,
 //        ];
-
-
-//        print_r(array_intersect($blabla, $array[0]));
-
-//         if ($blabla) {
 //
-//             foreach ($array as $key) {
-//                         echo '<pre>';
-//                 print_r(array_intersect($blabla, $key));
-//                         echo '<pre>';
-//             }
-//         }
-
-        exit();
-
-//        $arrayTwo = array_diff($array, $blabla);
-//        echo '<pre>';
-//        echo $arrayTwo;
-//        print_r($blabla);
-//        echo '</pre>';
+//        if ($newArrayLatLng && $allMyTables) {
+//            foreach ($allMyTables as $key) {
+//            $arrayNoTrue = array_map('json_decode', $key);
+//            $goodArray = json_decode(json_encode($arrayNoTrue['coordinate']), TRUE);
+//                 echo '<pre>';
+//                    print_r($goodArray);
+//                 echo '</pre>';
+//                 exit();
+//            }
+//        }
 //        exit();
 
+//        coordinate =  [
+//            lat
+//            lng
+//            ];
 
 //        $companyId = null;
 
-
-
-
-
-//         you table with coordinate
+//        $this->myCollectionFactory->create()->getSelect()->addFieldToFilter(/* lat == $lat and lng == $lng*/);
+//        you table with coordinate
 //        $this->coordinate->create()->getSelect()->addFieldToFilter(/* lat == $lat and lng == $lng*/);
 
 
