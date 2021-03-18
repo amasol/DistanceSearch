@@ -20,8 +20,6 @@ class Data extends AbstractHelper
     public function getCompanyIdByCoordinate($lat, $lng)
     {
         $model = $this->myCollectionFactory->create();
-        $array_json = $model->getColumnValues("coordinate");
-        $array = array_map('json_decode', $array_json);
 
         $blabla = [
             "lat" => $lat,
